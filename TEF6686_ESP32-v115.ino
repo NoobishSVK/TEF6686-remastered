@@ -55,13 +55,13 @@
 #include <EEPROM.h>
 #include <Wire.h>
 #include "SPIFFS.h"
-#include <analogWrite.h>    // https://github.com/ERROPiX/ESP32_AnalogWrite
-#include <TFT_eSPI.h>       // https://github.com/Bodmer/TFT_eSPI
-#include <RotaryEncoder.h>  // https://github.com/enjoyneering/RotaryEncoder
+#include <analogWrite.h>        // https://github.com/ERROPiX/ESP32_AnalogWrite
+#include <TFT_eSPI.h>           // https://github.com/Bodmer/TFT_eSPI
+#include <RotaryEncoder.h>      // https://github.com/enjoyneering/RotaryEncoder
 #include <Hash.h>
-#include <WiFiConnect.h>
-#include <ESPAsyncWebServer.h>
-#include <AsyncTCP.h>
+#include <WiFiConnect.h>        // https://registry.platformio.org/libraries/mrfaptastic/WiFiConnect%20Lite
+#include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
+#include <AsyncTCP.h>           // https://github.com/me-no-dev/AsyncTCP
 
 #define ROTARY_PIN_A 34
 #define ROTARY_PIN_B 36
@@ -267,8 +267,8 @@ const float MAX_BATTERY_VOLTAGE = 4.05;
 
 int rawValue = analogRead(BATTERYPIN);
 float voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
-//float batteryFraction = voltageLevel / MAX_BATTERY_VOLTAGE;
-float batteryFraction = map(voltageLevel, MIN_BATTERY_VOLTAGE, MAX_BATTERY_VOLTAGE, 0, 1);
+float batteryFraction = (voltageLevel - MIN_BATTERY_VOLTAGE) / (MIN_BATTERY_VOLTAGE / MAX_BATTERY_VOLTAGE);
+//float batteryFraction = map(voltageLevel, MIN_BATTERY_VOLTAGE, MAX_BATTERY_VOLTAGE, 0, 1);
 int batteryPercentage = batteryFraction * 100;
 
 //Wi-Fi Setup Webpage HTML Code
