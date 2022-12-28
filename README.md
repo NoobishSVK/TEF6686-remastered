@@ -4,6 +4,9 @@ An improvement of PE5PVB's TEF6686 firmware based on ESP32. https://github.com/P
 
 ## List of changes since v1.15:
 ### v1.21
+- RDS RadioText now scrolls, so you can see all 64 characters
+- Graphical glitches while scrolling in menus have been fixed
+- Added Wi-Fi signal in dBm to the new menu
 
 ### v1.20
 - Fixed the rotary button so it doesn't activate twice
@@ -24,9 +27,19 @@ An improvement of PE5PVB's TEF6686 firmware based on ESP32. https://github.com/P
 TODO: Add instructions for how to install and set up the project.
 
 ## Contributors
-
-TODO: Add information about how others can contribute to the project.
+[PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project
+[Hyper DX](https://github.com/HyperDX) - RDS Autoclear function + Bandwidth update limiter
 
 ## License
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-TODO: Add information about the license for the project.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
