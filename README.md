@@ -3,6 +3,9 @@
 An improvement of PE5PVB's TEF6686 firmware based on ESP32.  
 Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 
+[<img alt="Join the TEF6686 Discord community!" src="https://i.imgur.com/BYqhuLI.png">](https://discord.gg/ZAVNdS74mC)  
+
+
 ## List of changes since v1.15:
 ### v1.21
 - RDS RadioText now scrolls, so you can see all 64 characters
