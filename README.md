@@ -1,6 +1,7 @@
 # TEF6686 [ESP32] - Remastered!
 
-An improvement of PE5PVB's TEF6686 firmware based on ESP32. https://github.com/PE5PVB/TEF6686_ESP32
+An improvement of PE5PVB's TEF6686 firmware based on ESP32. 
+Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 
 ## List of changes since v1.15:
 ### v1.21
