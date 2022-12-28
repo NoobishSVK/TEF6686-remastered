@@ -39,6 +39,8 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 ## Contributors
 [PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project  
 [Hyper DX](https://github.com/HyperDX) - RDS Autoclear function + Bandwidth update limiter  
+[Koishii](https://github.com/Koishii) - Code ideas, community moderation  
+  
 A big THANK YOU to all the contributors! 💕
 
 ## License
