@@ -11,6 +11,7 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 - RDS RadioText now scrolls, so you can see all 64 characters
 - Graphical glitches while scrolling in menus have been fixed
 - Added Wi-Fi signal in dBm to the new menu
+- XDR-GTK's signal graph is much smoother now (similar to F1HD) 
 
 ### v1.20
 - Fixed the rotary button so it doesn't activate twice
@@ -40,6 +41,7 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 [PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project  
 [Hyper DX](https://github.com/HyperDX) - RDS Autoclear function + Bandwidth update limiter  
 [Koishii](https://github.com/Koishii) - Code ideas, community moderation  
+[Konrad Kosmatka](https://github.com/kkonradpl) - XDR-GTK support improvements
   
 A big THANK YOU to all the contributors! 💕
 
