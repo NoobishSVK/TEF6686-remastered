@@ -3850,8 +3850,12 @@ void XDRGTKRoutine() {
     }
     if (SStatus > (SStatusold + 10) || SStatus < (SStatusold - 10)) {
       Serial.print(((SStatus * 100) + 10875) / 1000);
+      Serial.print(".");
+      Serial.print(((SStatus * 100) + 10875) / 100 % 10);
     } else {
       Serial.print(((SStatusold * 100) + 10875) / 1000);
+      Serial.print(".");
+      Serial.print(((SStatusold * 100) + 10875) / 100 % 10);
     }
     Serial.print(',');
     Serial.print(WAM / 10, DEC);
@@ -4267,8 +4271,12 @@ void XDRGTKWiFi() {
     }
     if (SStatus > (SStatusold + 10) || SStatus < (SStatusold - 10)) {
       RemoteClient.print(((SStatus * 100) + 10875) / 1000);
+      RemoteClient.print(".");
+      RemoteClient.print(((SStatus * 100) + 10875) / 100 % 10);
     } else {
       RemoteClient.print(((SStatusold * 100) + 10875) / 1000);
+      RemoteClient.print(".");
+      RemoteClient.print(((SStatus * 100) + 10875) / 100 % 10);
     }
     RemoteClient.print(',');
     RemoteClient.print(WAM / 10, DEC);
