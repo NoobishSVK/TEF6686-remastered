@@ -501,7 +501,7 @@ void setup() {
   }
 
   doTheme();
-  sprite.createSprite(318, 18);
+  sprite.createSprite(313, 18);
 
   analogWrite(CONTRASTPIN, ContrastSet * 2 + 27);
   analogWrite(SMETERPIN, 0);
@@ -2227,6 +2227,8 @@ void readRds() {
       if (RDSClear == 1) {
         tft.setTextColor(BackgroundColor);
       } else {
+        sprite.fillSprite(BackgroundColor);
+        sprite.pushSprite(6, 220);
         tft.setTextColor(TFT_DARKGREY);
       }
       tft.drawString(PIold, 244, 192, 4);
