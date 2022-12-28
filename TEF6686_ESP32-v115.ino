@@ -3865,19 +3865,23 @@ void tcp_hex(uint8_t val) {
 }
 
 void XDRCommunication() {
-      RemoteClient = server.available();
-      passwordcrypt();
-      RemoteClient.print(saltkey + "\n");
+/*  RemoteClient = server.available();
+  passwordcrypt();
+  RemoteClient.print(saltkey + "\n");*/
 
   if (server.hasClient()) {
     if (RemoteClient.connected()) {
-      //          server.available().stop();
+      server.available().stop();
     } else {
+      /* When first client connects */
       wificonnect = true;
+      RemoteClient = server.available();
+      passwordcrypt();
+      RemoteClient.print(saltkey + "\n");
     }
   } else {
     if (server.hasClient()) {
-//      server.available().stop();
+      server.available().stop();
     }
   }
 }
@@ -3906,7 +3910,6 @@ void XDRGTKWiFi() {
           RemoteClient.print("A0\n");
           RemoteClient.print("D0\n");
           RemoteClient.print("G00\n");
-          //          USBstatus = true;
           WiFistatus = true;
           ShowUSBstatus();
           if (menu == true) {
