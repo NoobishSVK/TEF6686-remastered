@@ -25,7 +25,7 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 
 ## Installation
 
-###Windows: 🪟
+### Windows: 🪟
 1) Press **"WIN+R"** and open **devmgmt.msc**
 2) Under the section **"COM & LPT"**, you will see your tuner - mark down the COM port, you will need it later
 3) Edit the **flash.bat** file and edit the **"COM"** port to the number you see in devmgmt.msc
