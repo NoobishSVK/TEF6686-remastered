@@ -25,7 +25,13 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 
 ## Installation
 
-TODO: Add instructions for how to install and set up the project.
+###Windows: 🪟
+1) Press **"WIN+R"** and open **devmgmt.msc**
+2) Under the section **"COM & LPT"**, you will see your tuner - mark down the COM port, you will need it later
+3) Edit the **flash.bat** file and edit the **"COM"** port to the number you see in devmgmt.msc
+4) Hold the **BOOT button** on your TEF6686 ESP32 board while starting the tuner, that will put it into the bootloader mode
+5) Open **flash.bat** and wait until the proccess finishes
+6) Reboot the tuner - that's it!
 
 ## Contributors
 [PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project  
