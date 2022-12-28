@@ -1,134 +1,9 @@
 /*
 ********************************************************************************
   Advanced Tuner software for NXP TEF668x ESP32
-   (c) 2021 Sjef Verhoeven pe5pvb@het-bar.net
+   (c) 2023 Sjef Verhoeven pe5pvb@het-bar.net & Noobish noobish@noobish.eu
     Based on Catena / NXP semiconductors API
 ********************************************************************************
-  v1.00 - Release
-  v1.01 - Add interrupt on both Rotary pins
-        - Add default settings
-        - Add Standby function
-        - Forced reboot after XDR-GTK disconnect
-  v1.02 - Fixed signalstrenght display when
-          value is 0 after boot or isn't changed
-          after menu close
-        - Added stepsize option
-        - Show "<" when signallevel is below
-          0dBuV. Showing negative value is very
-          unstable.
-        - Cosmetic improvements
-  v1.03 - When signallevel is < set value all
-          statusses will only be updated
-          every 0.5 seconds. Threshold can be
-          set in the menu. RDS is then disabled
-          This will also improve I2C and ADC
-          noise on low level signals.
-        - System can now show negative dBuV.
-  v1.04 - Optimised TEF initialisation
-        - Fix on peakhold modulation meter
-        - Added Stereo squelch (turn knob right)
-        - Added Squelch off (turn knob left)
-        - Show current Squelch threshold
-  v1.05 - Fixed bug: Patch was not loaded
-          correctly into tuner after boot
-        - In Low level mode, RDS logo disabled
-        - Fix Stereo/mono toggle when using
-          XDR-GTK
-        - Fixed Squelch level readout when
-          leaving menu. This could cause auto-
-          scan to not work.
-        - Fix: RDS logo was not disabled in low
-          signal level mode
-        - Changed advice for TFT frequency to
-          reduce unwanted noise
-        - Optimised soft-boot
-  v1.06 - Slow down I2C speed to reduce noise
-        - Fix auto scan when squelch level is
-          below 0dBuV
-        - Fix show Hz (not kHz) on high cut
-          corner frequency
-  v1.07 - Added multipath suppresion (iMS) and
-          Channel Equalizer (EQ)
-        - Long press rotary to toggle iMS and EQ
-        - Added standby LED on D19
-        - XDR-GTK: Use the antenna rotor buttons
-          to start scan up or down
-        - XDR-GTK: Enable IF+ to force low
-          signal level mode
-        - XDR-GTK: DX1 = Normal
-                   DX2 = iMS enabled
-                   DX3 = EQ enabled
-                   DX4 = Both enabled
-        - Small modifications on XDR-GTK routine
-          for compatibility with modified
-          XDR-GTK TEF6686 edition
-        - Fixed small bug with displaytext in
-          scan mode
-  v1.08 - Fixed interrupted canvas lines on TFT
-        - Added function to mute TFT using XDR-
-          GTK. Use RF+ to use this function
-        - Level offset is still as set when
-          using XDR-GTK
-        - Detach interrupts when writing
-          frequency to display, to prevent
-          display crash
-        - Fixed bug when squelch is set to -1
-        - Fixed bug that volume offset was reset
-          to 0 after changing frequency
-  v1.09 - Stereo indication didn't work when RF+
-          was set in XDR-GTK
-        - Minor fix: When for some reason the
-          signallevel was an invalid value, now
-          the limit is -10 to +120dBuV
-        - No more short mute when changing frequency
-        - tuned indication only on when signal
-          valid.
-        - In Auto mode frequency is now shown and
-          direction can be changed on the fly.
-          to stop searching, just press any key.
-        - Minor bugfix in low signal lever timer.
-  v1.10 - Stand-by function was bricked after last update.
-        - Code optimised for compiler v2.0.0.
-        - Startup frequency was always 100.0MHz. Fixed.
-  v1.11 - Maximum frequency changed to 108MHz. (110MHz is not possible).
-        - Added AM reception.
-        - Hold BW button during boot to change direction of
-          rotary encoder.
-        - Hold Mode button during boot to flip the screen.
-        - When RT was too long the canvas was overwritten.
-  v1.12 - Stand-by key caused an issue when in menu mode.
-        - Canvas was broken on some points in the screen.
-        - Added possibility to connect analog signalmeter (thanks David DSP)
-        - Added slow signalmeter riding (thanks David DSP)
-        - S-meter for AM is corrected to the right values.
-  v1.13 - Fix for frequency offset in AM.
-        - Fix for flickering signalmeter when fluctuation is < 1dBuV.
-        - Added support for David DSP's converter board.
-  v1.14 - Bugfix: When signallevel drops down in digits, old digits were still displayed.
-  v1.15 - Fix AM bandwidth setting on F6805 chipset
-        - Added microcode for whole TEF668x family (Lithio)
-        - Added C/N readout
-        - S-meter and modulation meter update (Thanks David DSP)
-        - Added splash screen with tuner info
-        - Fixed problem when tuning beyond bandlimits on AM
-        - FM level calibrated
-        - Function added to choose between regular and optical rotary encoder (hold rotary button during boot)
-  v1.20 - [Modded by Noobish - for Aliexpress tuners]
-        - Fixed the rotary button so it doesn't activate twice
-        - New theme engine
-        - Added a second menu (hold blue button to activate)
-        - Changed the color scheme
-        - Added battery voltage info
-        - Readded XDR-GTK support for chinese tuners
-        - Added XDR-GTK support over wifi
-        * The RT is now scrolling
-        - New dBf/dBuV switch
-        - Changed the bandwidth refresh timer
-        - Changed the default FM step to 100 kHz
-        - New switch for RDS info (the user can now choose if the info should be clear on low signal)
-        - Changed the PTY of "Variable" to "Varied"
-        ********************************************************************************
-
   Analog signalmeter:
                        to meter
                           |
@@ -156,8 +31,7 @@
   BW LONG PRESS: Switch mono, or auto stereo
 * ***********************************************
 
-
-  Use this settings in TFT_eSPI User_Setup.h
+  Use these settings in TFT_eSPI User_Setup.h
   #define ILI9341_DRIVER
   #define TFT_CS          5
   #define TFT_DC          17
@@ -172,7 +46,7 @@
   #define SMOOTH_FONT
   #define SPI_FREQUENCY   10000000
 
-  ALL OTHER SETTINGS SHOULD BE REMARKED!!!!
+  ALL OTHER SETTINGS SHOULD STAY !!!!
 
 */
 
@@ -189,7 +63,6 @@
 #include <ESPAsyncWebServer.h>
 #include <AsyncTCP.h>
 
-//#define GreyoutColor 0x4A69
 #define ROTARY_PIN_A 34
 #define ROTARY_PIN_B 36
 #define ROTARY_BUTTON 39
@@ -203,8 +76,8 @@
 #define BATTERYPIN 13
 
 #define BWINTERVAL 200
-//#define ARS       // uncomment for BGR type display (ARS version)
 
+//#define ARS       // uncomment for BGR type display (ARS version)
 #ifdef ARS
 #define VERSION "v1.15ARS"
 #include "TFT_Colors.h"
@@ -225,7 +98,6 @@ void ICACHE_RAM_ATTR encoderButtonISR() {
   encoder.readPushButton();
 }
 
-//IPAddress ip;
 bool tuned;
 bool setupmode;
 bool direction;
@@ -307,7 +179,6 @@ int StereoLevel;
 int Stereostatus;
 int VolSet;
 int volume;
-
 int XDRBWset;
 int XDRBWsetold;
 int PrimaryColor;
@@ -400,6 +271,7 @@ float voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate vo
 float batteryFraction = map(voltageLevel, MIN_BATTERY_VOLTAGE, MAX_BATTERY_VOLTAGE, 0, 1);
 int batteryPercentage = batteryFraction * 100;
 
+//Wi-Fi Setup Webpage HTML Code
 const char index_html[] PROGMEM = "<!DOCTYPE html><html><head> <title>TEF6686 Wi-Fi Setup</title> <meta name='viewport' content='width=device-width, initial-scale=1'> <link rel='stylesheet' type='text/css' href='style.css'> <style> html { font-family: Arial, Helvetica, sans-serif;  display: inline-block;  text-align: center;}h1 { font-size: 1.8rem;  color: #252525;}.topnav {  overflow: hidden;  background-color: #00ea8f; }body {  margin: 0; background: #252525;}.content {  padding: 5%;}.card {  max-width: 800px;  margin: 0 auto;  background-color: white;  padding: 5px 5% 5px 5%;}input[type=submit] { color: #252525; background-color: #00ea8f; border: 3px solid #252525; cursor: pointer; font-weight: bold; padding: 15px 15px; text-align: center; text-decoration: none; font-size: 16px; width: 160px; margin-top: 20px; margin-bottom: 10px; border-radius: 8px; transition: .3s ease-in-out; }input[type=submit]:hover { background-color: #252525; border: 3px solid #00ea8f; color: #00ea8f;}input[type=text], input[type=number], select { width: 100%; padding: 12px 20px; border: 1px solid #ccc; box-sizing: border-box;}a { text-decoration: none; color: #00ea8f;}p { font-size: 14px; text-transform: uppercase;  text-align: left; margin: 0; margin-top: 15px;}.card p{ font-weight: bold;}.gateway-info{ text-transform: initial; text-align: center; color: white;} </style></head><body> <div class='topnav'> <h1>TEF6686 Wi-Fi SETUP</h1> </div> <div class='content'> <div class='card'> <form action='/' method='POST'> <p>SSID:</p> <input type='text' id ='ssid' name='ssid' placeholder='The exact name of your Wi-Fi network'><br> <p>Password:</p> <input type='text' id ='pass' name='pass' placeholder='Password to your Wi-Fi network'><br> <p>IP Address:</p> <input type='text' id ='ip' name='ip' placeholder='Example: 192.168.1.200'><br> <p>Gateway:</p> <input type='text' id ='gateway' name='gateway' placeholder='Example: 192.168.1.1'><br> <input type ='submit' value ='SUBMIT'> </form> </div> <p class='gateway-info'>If you're unsure, you can <a href='https://www.noip.com/support/knowledgebase/finding-your-default-gateway/' target='_blank'>look up how to get your gateway</a>.</p> </div></body></html>";
 
 TEF6686 radio;
@@ -408,10 +280,8 @@ AsyncWebServer setupserver(80);
 WiFiServer server(7373);
 WiFiClient RemoteClient;
 TFT_eSprite sprite = TFT_eSprite(&tft);
-//WiFiConnect wc;
 
 void initSPIFFS() {
- // SPIFFS.begin(true, "/", 0x200000);
  if (!SPIFFS.begin(true)) {
     Serial.println("An error has occurred while mounting SPIFFS");
   }
@@ -723,7 +593,6 @@ void setup() {
   tft.drawCentreString("TEF6686", 160, 85, 2);
   tft.drawCentreString("AM/FM Receiver", 160, 145, 4);
   tft.setTextColor(PrimaryColor);
-  //  tft.drawCentreString("Booting up...", 160, 165, 2);
   if (CurrentTheme == 0) {
     tft.setTextColor(FrameColor);
   } else {
@@ -736,17 +605,6 @@ void setup() {
   tft.fillRect(152, 180, 16, 6, GreyoutColor);
   tft.fillRect(184, 180, 16, 6, GreyoutColor);
 
-  /*
-  tft.pushImage(0, 99, 211, 140, pe5pvblogo);
-  tft.pushImage(239, 200, 80, 30, nxplogo);
-  tft.setTextColor(TFT_YELLOW);
-  tft.drawCentreString("FM/AM receiver", 160, 10, 4);
-  tft.setTextColor(TFT_YELLOW);
-  tft.drawCentreString("Software " + String(VERSION), 160, 30, 2);
-  tft.setTextColor(TFT_MAGENTA);
-  tft.drawCentreString("modded by Noobish", 160, 45, 2);
-  tft.setTextColor(ActiveColor);
-  tft.drawString("Lithio", 260, 180, 2);*/
 
 
   if (lowByte(device) == 14) {
@@ -765,7 +623,7 @@ void setup() {
     for (;;)
       ;
   }
-  //  tft.drawString("Patch: v" + String(TEF), 80, 80, 2);
+
   tft.drawString("Patch: v" + String(TEF), 10, 205, 2);
   delay(200);
   tft.fillRect(120, 180, 16, 6, PrimaryColor);
