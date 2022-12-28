@@ -307,6 +307,7 @@ int StereoLevel;
 int Stereostatus;
 int VolSet;
 int volume;
+
 int XDRBWset;
 int XDRBWsetold;
 int PrimaryColor;
@@ -1036,6 +1037,11 @@ void loop() {
 
     if (position < encoder.getPosition()) {
       if (rotarymode == 0 && menu != true && menu2 != true) {
+        sprite.fillSprite(BackgroundColor);
+        KeyUp();
+      } else {
+        KeyDown();
+      }
         radio.clearRDS();
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
@@ -1048,15 +1054,14 @@ void loop() {
         PTYold = "";
         PIold = "";
         RTold = "";
-        sprite.fillSprite(BackgroundColor);
-        KeyUp();
-      } else {
-        KeyDown();
-      }
     }
 
     if (position > encoder.getPosition()) {
       if (rotarymode == 0 && menu != true && menu2 != true) {
+        KeyDown();
+      } else {
+        KeyUp();
+      }
         radio.clearRDS();
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
@@ -1069,10 +1074,6 @@ void loop() {
         PTYold = "";
         PIold = "";
         RTold = "";
-        KeyDown();
-      } else {
-        KeyUp();
-      }
     }
 
     if (digitalRead(MODEBUTTON) == LOW && digitalRead(BWBUTTON) != LOW && screenmute == false) {
