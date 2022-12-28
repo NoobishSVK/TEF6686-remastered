@@ -1,6 +1,6 @@
 # TEF6686 [ESP32] - Remastered!
 
-An improvement of PE5PVB's TEF6686 firmware based on ESP32. 
+An improvement of PE5PVB's TEF6686 firmware based on ESP32.  
 Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 
 ## List of changes since v1.15:
@@ -28,8 +28,9 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 TODO: Add instructions for how to install and set up the project.
 
 ## Contributors
-[PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project
-[Hyper DX](https://github.com/HyperDX) - RDS Autoclear function + Bandwidth update limiter
+[PE5PVB](https://github.com/PE5PVB/TEF6686_ESP32) - ESP32 TEF6686 Project  
+[Hyper DX](https://github.com/HyperDX) - RDS Autoclear function + Bandwidth update limiter  
+A big THANK YOU to all the contributors! 💕
 
 ## License
 This program is free software: you can redistribute it and/or modify
