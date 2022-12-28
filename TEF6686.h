@@ -5,13 +5,12 @@
 #include "Tuner_Drv_Lithio.h"
 #include "Tuner_Interface.h"
 
-
 struct RdsInfo {
   char programType[17];
   char programService[9];
   char programServiceUnsafe[9];
   char programId[5];
-  char radioText[65];
+  char radioText[65];  
   bool newRadioText;
 };
 
