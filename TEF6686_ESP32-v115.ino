@@ -124,6 +124,7 @@ bool wificonnect;
 bool XDRMute;
 bool wifisetupopen = false;
 extern bool ProgramTP;
+extern bool TPStatus;
 byte band;
 byte BWset;
 byte ContrastSet;
@@ -242,12 +243,6 @@ IPAddress localGateway;
 IPAddress subnet(255, 255, 255, 0);
 unsigned long previousMillis = 0;
 const long interval = 2500;  // interval to wait for Wi-Fi connection (milliseconds)
-
-const int num_TPiterations = 3;
-
-bool prev_ProgramTP;
-
-int TPcount = 0;
 
 uint16_t rdsB;
 uint16_t rdsC;
@@ -728,7 +723,8 @@ void loop() {
             tft.drawString(PSold, 38, 192, 4);
             tft.drawString(PIold, 244, 192, 4);
             tft.drawString(RTold, 6, 222, 2);
-            tft.drawString(PTYold, 38, 168, 2);
+            tft.drawString(PTYold, 38, 168, 2);  
+            tft.drawString("TP", 190, 168, 2);          
           }
 
           tft.fillRect(20, 139, 12, 8, GreyoutColor);
@@ -906,10 +902,6 @@ void loop() {
       if (rotarymode == 0 && menu != true && menu2 != true) {
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
-        KeyUp();
-      } else {
-        KeyDown();
-      }
         radio.clearRDS();
         tft.setTextColor(BackgroundColor);
         tft.drawString(PSold, 38, 192, 4);
@@ -920,6 +912,10 @@ void loop() {
         PTYold = "";
         PIold = "";
         RTold = "";
+        KeyUp();
+      } else {
+        KeyDown();
+      }
     }
 
     if (position > encoder.getPosition()) {
@@ -927,9 +923,6 @@ void loop() {
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
         KeyDown();
-      } else {
-        KeyUp();
-      }
         radio.clearRDS();
         tft.setTextColor(BackgroundColor);
         tft.drawString(PSold, 38, 192, 4);
@@ -940,6 +933,9 @@ void loop() {
         PTYold = "";
         PIold = "";
         RTold = "";
+      } else {
+        KeyUp();
+      }
     }
 
     if (digitalRead(MODEBUTTON) == LOW && digitalRead(BWBUTTON) != LOW && screenmute == false) {
@@ -2242,10 +2238,24 @@ void readRds() {
     if (RDSstatus == 0) {
       if (RDSClear == 1) {
         tft.setTextColor(BackgroundColor);
+
+        if(TPStatus == true) {
+          tft.setTextColor(BackgroundColor);
+          tft.drawString("TP", 190, 168, 2);
+          TPStatus = false;
+        }
+
       } else { 
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
-        tft.setTextColor(TFT_DARKGREY);
+
+        if(TPStatus == true) {
+          tft.setTextColor(GreyoutColor);
+          tft.drawString("TP", 190, 168, 2);
+          TPStatus = false;
+        }
+        
+        tft.setTextColor(GreyoutColor);
       }
       tft.drawString(PIold, 244, 192, 4);
       tft.drawString(PSold, 38, 192, 4);
@@ -2302,27 +2312,10 @@ void showPI() {
 }
 
 void showTP() {
-
-  if (ProgramTP == prev_ProgramTP) {
-    TPcount++;
-  } else {
-    TPcount = 0;
-  }
-
-  prev_ProgramTP = ProgramTP;
-
-  if (millis() - TPCLOCK >= 250) {
-    if (TPcount == num_TPiterations) {
-      if (ProgramTP == true) {
+      if (RDSstatus == 1 && TPStatus == true) {
         tft.setTextColor(PrimaryColor);
-        tft.drawString("TP", 190, 168, 2);
-      } else {
-        tft.setTextColor(BackgroundColor);
-        tft.drawString("TP", 190, 168, 2);
+        tft.drawString("TP", 190, 168, 2);      
       }
-    }
-    TPCLOCK = millis();
-  }
 }
 
 void showPTY() {

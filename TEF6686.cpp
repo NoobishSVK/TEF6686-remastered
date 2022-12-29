@@ -1,6 +1,7 @@
 #include "TEF6686.h"
 
 bool ProgramTP;
+bool TPStatus;
 
 const char* const ptyLUT[] = {
   "None",
@@ -277,9 +278,7 @@ bool TEF6686::readRDS(uint16_t &rdsB, uint16_t &rdsC, uint16_t &rdsD, uint16_t &
   }
 
   if ((bitRead(rdsB, 4)) == 0 && ((bitRead(rdsB, 10)) == 1)) {
-    ProgramTP = true;
-  } else {
-    ProgramTP = false;
+    TPStatus = true;
   }
 
   if (errA == 0) {
@@ -410,6 +409,7 @@ void TEF6686::clearRDS() {
   strcpy(rdsRadioText, "                                         ");
   psErrors = 0xFFFFFFFF;
   psCharIsSet = 0;
+  TPStatus = false;
 }
 
 void TEF6686::rdsFormatString(char* str, uint16_t length) {
