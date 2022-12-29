@@ -58,7 +58,7 @@
 #include <analogWrite.h>        // https://github.com/ERROPiX/ESP32_AnalogWrite
 #include <TFT_eSPI.h>           // https://github.com/Bodmer/TFT_eSPI
 #include <RotaryEncoder.h>      // https://github.com/enjoyneering/RotaryEncoder
-#include <Hash.h>
+#include <Hash.h>               // https://github.com/bbx10/Hash_tng
 #include <WiFiConnect.h>        // https://registry.platformio.org/libraries/mrfaptastic/WiFiConnect%20Lite
 #include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <AsyncTCP.h>           // https://github.com/me-no-dev/AsyncTCP
