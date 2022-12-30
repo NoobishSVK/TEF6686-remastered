@@ -273,7 +273,6 @@ const float MAX_BATTERY_VOLTAGE = 4.05;
 int rawValue = analogRead(BATTERYPIN);
 float voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
 float batteryFraction = (voltageLevel - MIN_BATTERY_VOLTAGE) / (MIN_BATTERY_VOLTAGE / MAX_BATTERY_VOLTAGE);
-//float batteryFraction = map(voltageLevel, MIN_BATTERY_VOLTAGE, MAX_BATTERY_VOLTAGE, 0, 1);
 int batteryPercentage = batteryFraction * 100;
 
 // Wi-Fi Setup Webpage HTML Code
@@ -2346,12 +2345,6 @@ void showPS() {
 
 void showRadioText() {
   if ((RDSstatus == 1) /*&& !strcmp(rdsInfo.radioText, radioTextPrevious, 65)*/) {
-//    tft.setTextColor(BackgroundColor);
-//    tft.drawString(RTold, 6, 222, 2);
-//    tft.setTextColor(PrimaryColor);
-/*    tft.drawString(rdsInfo.radioText, 6, 222, 2);*/
-
-
 
   if (millis() - RTCLOCK >= 350) {
     // Update the position of the text
@@ -2363,31 +2356,9 @@ void showRadioText() {
     sprite.fillSprite(BackgroundColor);
     sprite.setTextColor(PrimaryColor);
     sprite.drawString(rdsInfo.radioText, xPos, yPos, 2);
-/*    tft.fillRect(1, 220, 318, 18, BackgroundColor);
-    tft.setTextColor(PrimaryColor);
-    tft.drawString(rdsInfo.radioText, xPos, yPos, 2);*/
     sprite.pushSprite(6, 220);
     RTCLOCK = millis();
   }
-/*  
-      String text = rdsInfo.radioText;
-
-    if (counter - counterold > 500) {
-    for (int offset = 0; offset < text.length(); offset++)
-    {
-      tft.drawRect(0, 0, 320, 240, FrameColor);
-      String t = "";
-      for (int i = 0; i < width; i++)
-        t += text.charAt((offset + i) % text.length());
-      tft.fillRect(1, 220, 318, 18, BackgroundColor);
-      tft.setTextColor(PrimaryColor);
-      tft.drawString(t, 6, 222, 2);
-      counter = millis();
-    }
-//    RTCLOCK += BWINTERVAL;
-  }*/
-
-//    tft.drawRect(0, 0, 320, 240, FrameColor);
     RTold = rdsInfo.radioText;
     strcpy(radioTextPrevious, rdsInfo.radioText);
   }
@@ -2537,12 +2508,16 @@ void BuildMenu2() {
   if (batteryPercentage < 20) {
     tft.setTextColor(TFT_RED);
   }
+  tft.drawString("Battery:", 20, 190, 2);
 
-  tft.drawString("Battery: " /*+ String(voltageLevel) + "V"*/, 20, 190, 2);
-  tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
-  tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
+  if (voltageLevel > 0.5) {
+    tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
+    tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
+  } else {
+    tft.drawString("NONE", 20, 205, 2);
+  }
 
-    /* Menu 2 Wi-Fi network info */
+  /* Menu 2 Wi-Fi network info */
 
   tft.setTextColor(SecondaryColor);
   if (WiFiSwitch == 0) {
@@ -3289,37 +3264,6 @@ void updateBW() {
     }
   }
 }
-
-/*void updateBattery() {
-  if (screenmute == false) {
-    BatteryLevel = analogRead(13); // 27
-    BatteryVoltage = BatteryLevel * 5.0/1023;
-    BatteryPercentage = map(BatteryVoltage, 3.6, 4.2, 0, 100);
-
-    tft.setTextColor(TFT_GREEN);
-    tft.drawCentreString(String(BatteryPercentage) + "%", 275, 200, 2);
-    tft.drawCentreString(String(BatteryVoltage) + "V", 275, 185, 2);
-  }
-}*/
-
-/*void updateBattery() {
-  if (screenmute == false) {
-    BatteryLevel = analogRead(13); // 27
-    BatteryPercentage = map(BatteryLevel, 0, 649, 0, 100); //665 full usb, 649 full battery
-//    BatteryFloor = floor(BatteryPercentage), 0);
-
-    if (BatteryLevel >= 649)
-    {
-      BatteryPercentage = 100;
-    }
-
-    tft.setTextColor(TFT_GREEN);
-    tft.drawCentreString(String(BatteryLevel), 265, 185, 2);
-    tft.drawCentreString("Battery level:", 265, 200, 2);
-    tft.drawCentreString(String(BatteryPercentage) + "%", 265, 215, 2);
-//      tft.drawCentreString(String(floor(BatteryPercentage), 0)) + "%", 265, 215, 2);
-  }
-}*/
 
 void updateiMS() {
   if (band == 0) {
