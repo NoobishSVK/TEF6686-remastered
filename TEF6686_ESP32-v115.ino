@@ -30,7 +30,8 @@
   BW SHORT PRESS: Switch bandwidth setting
   BW LONG PRESS: Switch mono, or auto stereo
 * ***********************************************
-
+  ATTENTION: If you want to compile this code, use Arduino Core for ESP32 v1.0.6 - newer versions won't work!
+* ***********************************************
   Use these settings in TFT_eSPI User_Setup.h
   #define ILI9341_DRIVER
   #define TFT_CS          5
@@ -63,6 +64,7 @@
 #include <ESPAsyncWebServer.h>  // https://github.com/me-no-dev/ESPAsyncWebServer
 #include <AsyncTCP.h>           // https://github.com/me-no-dev/AsyncTCP
 
+/* Button -> PIN connections */
 #define ROTARY_PIN_A 34
 #define ROTARY_PIN_B 36
 #define ROTARY_BUTTON 39
@@ -75,7 +77,7 @@
 #define SMETERPIN 27
 #define BATTERYPIN 13
 
-#define BWINTERVAL 200
+#define BWINTERVAL 200 // Refresh interval for certain UI elements 
 
 //#define ARS       // uncomment for BGR type display (ARS version)
 #ifdef ARS
@@ -274,7 +276,7 @@ float batteryFraction = (voltageLevel - MIN_BATTERY_VOLTAGE) / (MIN_BATTERY_VOLT
 //float batteryFraction = map(voltageLevel, MIN_BATTERY_VOLTAGE, MAX_BATTERY_VOLTAGE, 0, 1);
 int batteryPercentage = batteryFraction * 100;
 
-//Wi-Fi Setup Webpage HTML Code
+// Wi-Fi Setup Webpage HTML Code
 const char index_html[] PROGMEM = "<!DOCTYPE html><html><head> <title>TEF6686 Wi-Fi Setup</title> <meta name='viewport' content='width=device-width, initial-scale=1'> <link rel='stylesheet' type='text/css' href='style.css'> <style> html { font-family: Arial, Helvetica, sans-serif;  display: inline-block;  text-align: center;}h1 { font-size: 1.8rem;  color: #252525;}.topnav {  overflow: hidden;  background-color: #00ea8f; }body {  margin: 0; background: #252525;}.content {  padding: 5%;}.card {  max-width: 800px;  margin: 0 auto;  background-color: white;  padding: 5px 5% 5px 5%;}input[type=submit] { color: #252525; background-color: #00ea8f; border: 3px solid #252525; cursor: pointer; font-weight: bold; padding: 15px 15px; text-align: center; text-decoration: none; font-size: 16px; width: 160px; margin-top: 20px; margin-bottom: 10px; border-radius: 8px; transition: .3s ease-in-out; }input[type=submit]:hover { background-color: #252525; border: 3px solid #00ea8f; color: #00ea8f;}input[type=text], input[type=number], select { width: 100%; padding: 12px 20px; border: 1px solid #ccc; box-sizing: border-box;}a { text-decoration: none; color: #00ea8f;}p { font-size: 14px; text-transform: uppercase;  text-align: left; margin: 0; margin-top: 15px;}.card p{ font-weight: bold;}.gateway-info{ text-transform: initial; text-align: center; color: white;} </style></head><body> <div class='topnav'> <h1>TEF6686 Wi-Fi SETUP</h1> </div> <div class='content'> <div class='card'> <form action='/' method='POST'> <p>SSID:</p> <input type='text' id ='ssid' name='ssid' placeholder='The exact name of your Wi-Fi network'><br> <p>Password:</p> <input type='text' id ='pass' name='pass' placeholder='Password to your Wi-Fi network'><br> <p>IP Address:</p> <input type='text' id ='ip' name='ip' placeholder='Example: 192.168.1.200'><br> <p>Gateway:</p> <input type='text' id ='gateway' name='gateway' placeholder='Example: 192.168.1.1'><br> <input type ='submit' value ='SUBMIT'> </form> </div> <p class='gateway-info'>If you're unsure, you can <a href='https://www.noip.com/support/knowledgebase/finding-your-default-gateway/' target='_blank'>look up how to get your gateway</a>.</p> </div></body></html>";
 
 TEF6686 radio;
@@ -1309,14 +1311,14 @@ void ButtonPress() {
   } else if (menu == false && menu2 == true) {
     if (menuopen == false) {
       menuopen = true;
-      tft.drawRoundRect(30, 40, 240, 160, 5, SecondaryColor);
-      tft.fillRoundRect(32, 42, 236, 156, 5, BackgroundColor);
+      tft.drawRoundRect(30, 40, 240, 160, 5, TFT_WHITE);
+      tft.fillRoundRect(32, 42, 236, 156, 5, TFT_BLACK);
       switch (menuoption) {
         case 30:
-          tft.setTextColor(SecondaryColor);
+          tft.setTextColor(TFT_WHITE);
           tft.drawCentreString("Color scheme:", 150, 70, 4);
           doTheme();
-          tft.setTextColor(PrimaryColor);
+          tft.setTextColor(TFT_WHITE);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           break;
 
@@ -1595,7 +1597,7 @@ void KeyUp() {
     } else {
       switch (menuoption) {
         case 30:
-          tft.setTextColor(BackgroundColor);
+          tft.setTextColor(TFT_BLACK);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           CurrentTheme += 1;
           if (CurrentTheme > 6) {
@@ -1603,7 +1605,7 @@ void KeyUp() {
           }
 
           doTheme();
-          tft.setTextColor(PrimaryColor);
+          tft.setTextColor(TFT_WHITE);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           break;
 
@@ -1934,7 +1936,7 @@ void KeyDown() {
     } else {
       switch (menuoption) {
         case 30:
-          tft.setTextColor(BackgroundColor);
+          tft.setTextColor(TFT_BLACK);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           CurrentTheme -= 1;
           if (CurrentTheme < 0) {
@@ -1942,7 +1944,7 @@ void KeyDown() {
           }
 
           doTheme();
-          tft.setTextColor(PrimaryColor);
+          tft.setTextColor(TFT_WHITE);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           break;
 
@@ -2405,7 +2407,7 @@ void BuildMenu() {
   tft.drawRect(0, 0, 320, 240, FrameColor);
   tft.drawLine(0, 23, 320, 23, FrameColor);
   tft.setTextColor(PrimaryColor);
-  tft.drawString("PRESS MODE TO EXIT AND STORE", 20, 4, 2);
+  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4);
   tft.setTextColor(SecondaryColor);
   tft.drawRightString(VERSION, 305, 4, 2);
   tft.drawRoundRect(10, menuoption, 300, 18, 5, SecondaryColor);
@@ -2540,10 +2542,9 @@ void BuildMenu2() {
   tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
   tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
 
-//  ip = WiFi.localIP();
+    /* Menu 2 Wi-Fi network info */
 
   tft.setTextColor(SecondaryColor);
-
   if (WiFiSwitch == 0) {
     tft.drawRightString("NETWORK DISCONNECTED", 310, 190, 2);
   } else {
@@ -2554,7 +2555,7 @@ void BuildMenu2() {
   analogWrite(SMETERPIN, 0);
 }
 
-void doTheme() {
+void doTheme() { // Use this to put your own colors in: http://www.barth-dev.de/online/rgb565-color-picker/
   switch (CurrentTheme) {
     case 0:  // Default PE5PVB theme
       PrimaryColor = 0xFFE0;
