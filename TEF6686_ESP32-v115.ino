@@ -2407,7 +2407,7 @@ void BuildMenu() {
   tft.drawRect(0, 0, 320, 240, FrameColor);
   tft.drawLine(0, 23, 320, 23, FrameColor);
   tft.setTextColor(PrimaryColor);
-  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4);
+  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);
   tft.setTextColor(SecondaryColor);
   tft.drawRightString(VERSION, 305, 4, 2);
   tft.drawRoundRect(10, menuoption, 300, 18, 5, SecondaryColor);
