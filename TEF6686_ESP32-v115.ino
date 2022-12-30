@@ -88,8 +88,6 @@ TFT_eSPI tft = TFT_eSPI(320, 240);
 #define VERSION "v1.21"
 TFT_eSPI tft = TFT_eSPI(240, 320);
 #endif
-
-
 RotaryEncoder encoder(ROTARY_PIN_A, ROTARY_PIN_B, ROTARY_BUTTON);
 int16_t position = 0;
 
@@ -2373,7 +2371,7 @@ void BuildMenu() {
   tft.drawRect(0, 0, 320, 240, FrameColor);
   tft.drawLine(0, 23, 320, 23, FrameColor);
   tft.setTextColor(PrimaryColor);
-  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);
+  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);  
   tft.setTextColor(SecondaryColor);
   tft.drawRightString(VERSION, 305, 4, 2);
   tft.drawRoundRect(10, menuoption, 300, 18, 5, SecondaryColor);
@@ -2839,11 +2837,10 @@ void ShowSignalLevel() {
   }
 
   if (true) {
-//    tft.fillRect(210, 100, 100, 60, TFT_GREEN);
     int offset = (SStatus < 0) ? -5 : 5;
-    // If the jump in S-meter value is less than 6dB, average the value; otherwise just use the new value as average
+    // If the jump in S-meter value is less than 12dB, average the value; otherwise just use the new value as average
 
-    if (abs((SAvg / 10) - SStatus) < 60) {
+    if (abs((SAvg / 10) - SStatus) < 120) {
       SAvg = (((SAvg * 9) + offset) / 10) + SStatus;
       SStatus = (SAvg / 10);
     } else
@@ -3849,9 +3846,6 @@ void tcp_hex(uint8_t val) {
 }
 
 void XDRCommunication() {
-/*  RemoteClient = server.available();
-  passwordcrypt();
-  RemoteClient.print(saltkey + "\n");*/
 
   if (server.hasClient()) {
     if (RemoteClient.connected()) {
@@ -3871,11 +3865,6 @@ void XDRCommunication() {
 }
 
 void XDRGTKWiFi() {
-
-  /*  RemoteClient = server.available();
-  passwordcrypt();
-  RemoteClient.print(saltkey + "\n");*/
-
   if (RemoteClient.available() > 0) {
     buff[buff_pos] = RemoteClient.read();
     if (buff[buff_pos] != '\n' && buff_pos != 16 - 1)
