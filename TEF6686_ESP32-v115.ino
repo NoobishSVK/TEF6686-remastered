@@ -2510,6 +2510,11 @@ void BuildMenu2() {
   }
   tft.drawString("Battery:", 20, 190, 2);
 
+  if (WiFiSwitch == 0) {
+    rawValue = analogRead(BATTERYPIN);
+    voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
+  }
+
   if (voltageLevel > 0.5) {
     tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
     tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
