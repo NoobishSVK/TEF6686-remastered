@@ -6,26 +6,19 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 [<img alt="Join the TEF6686 Discord community!" src="https://i.imgur.com/BYqhuLI.png">](https://discord.gg/ZAVNdS74mC)  
 
 
-## List of changes since v1.15:
+## List of changes in the latest version:
 ### v1.21
-- RDS RadioText now scrolls, so you can see all 64 characters
-- Graphical glitches while scrolling in menus have been fixed
-- Added Wi-Fi signal in dBm to the new menu
-- XDR-GTK's signal graph is much smoother now (similar to F1HD) 
-
-### v1.20
-- Fixed the rotary button so it doesn't activate twice
-- New theme engine
-- Added a second menu (hold blue button to activate)
-- Added battery voltage/percentage info
-- Readded XDR-GTK support for chinese tuners
-- Added XDR-GTK support over wifi
-- New dBf/dBuV switch
-- Changed the bandwidth refresh timer
-- Changed the default FM step to 100 kHz
-- New switch for RDS info (the user can now choose if the info should disappear on low signal)
-- Changed the PTY of "Variable" to "Varied"
-- A new switch for screen shutdown on XDR-GTK
+- Added signal in dBm when the user is connected to Wi-Fi
+- Wi-Fi icon rework (now the Wi-Fi icon will show whether you're connected to a network / XDR-GTK separately)
+- Battery status updates without reboot, if you're not using Wi-Fi
+- Signal should jump way less when a neighbour frequency is too strong
+- XDR-GTK graph is now way smoother (similar to XDR F1HD)
+- A TP indicator has been added next to PTY info
+- Battery voltage calculation has been recalibrated (bugs may still occur)
+- A new battery check has been added, which checks if the user has a battery connected or not
+- The RT is now scrolling
+- 2 new themes (Whiteout & Heaven)
+- Fixed various graphical glitches
 
 ## Installation
 
