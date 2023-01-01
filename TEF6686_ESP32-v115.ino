@@ -85,7 +85,7 @@
 #include "TFT_Colors.h"
 TFT_eSPI tft = TFT_eSPI(320, 240);
 #else
-#define VERSION "v1.21"
+#define VERSION "v1.22"
 TFT_eSPI tft = TFT_eSPI(240, 320);
 #endif
 RotaryEncoder encoder(ROTARY_PIN_A, ROTARY_PIN_B, ROTARY_BUTTON);
@@ -3615,40 +3615,25 @@ void XDRGTKRoutine() {
             frequencyold = radio.getFrequency();
             radio.setFrequency(scanner_start, 65, 108);
             Serial.print('U');
-            if (scanner_filter < 0) {
-              BWset = 0;
-            } else if (scanner_filter == 0) {
-              BWset = 1;
-            } else if (scanner_filter == 26) {
-              BWset = 2;
-            } else if (scanner_filter == 1) {
-              BWset = 3;
-            } else if (scanner_filter == 28) {
-              BWset = 4;
-            } else if (scanner_filter == 29) {
-              BWset = 5;
-            } else if (scanner_filter == 3) {
-              BWset = 6;
-            } else if (scanner_filter == 4) {
-              BWset = 7;
-            } else if (scanner_filter == 5) {
-              BWset = 8;
-            } else if (scanner_filter == 7) {
-              BWset = 9;
-            } else if (scanner_filter == 8) {
-              BWset = 10;
-            } else if (scanner_filter == 9) {
-              BWset = 11;
-            } else if (scanner_filter == 10) {
-              BWset = 12;
-            } else if (scanner_filter == 11) {
-              BWset = 13;
-            } else if (scanner_filter == 12) {
-              BWset = 14;
-            } else if (scanner_filter == 13) {
-              BWset = 15;
-            } else if (scanner_filter == 15) {
-              BWset = 16;
+            switch (scanner_filter) {
+                case -1: BWset = 0; break;
+                case 0: BWset = 1; break;
+                case 26: BWset = 2; break;
+                case 1: BWset = 3; break;
+                case 28: BWset = 4; break;
+                case 29: BWset = 5; break;
+                case 3: BWset = 6; break;
+                case 4: BWset = 7; break;
+                case 5: BWset = 8; break;
+                case 7: BWset = 9; break;
+                case 8: BWset = 10; break;
+                case 9: BWset = 11; break;
+                case 10: BWset = 12; break;
+                case 11: BWset = 13; break;
+                case 12: BWset = 14; break;
+                case 13: BWset = 15; break;
+                case 15: BWset = 16; break;
+                default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
@@ -3999,40 +3984,25 @@ void XDRGTKWiFi() {
             frequencyold = radio.getFrequency();
             radio.setFrequency(scanner_start, 65, 108);
             RemoteClient.print('U');
-            if (scanner_filter < 0) {
-              BWset = 0;
-            } else if (scanner_filter == 0) {
-              BWset = 1;
-            } else if (scanner_filter == 26) {
-              BWset = 2;
-            } else if (scanner_filter == 1) {
-              BWset = 3;
-            } else if (scanner_filter == 28) {
-              BWset = 4;
-            } else if (scanner_filter == 29) {
-              BWset = 5;
-            } else if (scanner_filter == 3) {
-              BWset = 6;
-            } else if (scanner_filter == 4) {
-              BWset = 7;
-            } else if (scanner_filter == 5) {
-              BWset = 8;
-            } else if (scanner_filter == 7) {
-              BWset = 9;
-            } else if (scanner_filter == 8) {
-              BWset = 10;
-            } else if (scanner_filter == 9) {
-              BWset = 11;
-            } else if (scanner_filter == 10) {
-              BWset = 12;
-            } else if (scanner_filter == 11) {
-              BWset = 13;
-            } else if (scanner_filter == 12) {
-              BWset = 14;
-            } else if (scanner_filter == 13) {
-              BWset = 15;
-            } else if (scanner_filter == 15) {
-              BWset = 16;
+            switch (scanner_filter) {
+                case -1: BWset = 0; break;
+                case 0: BWset = 1; break;
+                case 26: BWset = 2; break;
+                case 1: BWset = 3; break;
+                case 28: BWset = 4; break;
+                case 29: BWset = 5; break;
+                case 3: BWset = 6; break;
+                case 4: BWset = 7; break;
+                case 5: BWset = 8; break;
+                case 7: BWset = 9; break;
+                case 8: BWset = 10; break;
+                case 9: BWset = 11; break;
+                case 10: BWset = 12; break;
+                case 11: BWset = 13; break;
+                case 12: BWset = 14; break;
+                case 13: BWset = 15; break;
+                case 15: BWset = 16; break;
+                default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
