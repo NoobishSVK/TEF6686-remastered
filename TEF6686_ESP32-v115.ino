@@ -228,6 +228,12 @@ String VolString;
 String XDRGTKShutdownString;
 String WiFiSwitchString;
 
+// Extra settings strings
+const char* SignalUnitsStrings[] = {"dBuV", "dBf"};
+const char* RDSClearStrings[] = {"OFF", "ON"};
+const char* XDRGTKShutdownStrings[] = {"OFF", "ON"};
+const char* WiFiSwitchStrings[] = {"OFF", "ON"};
+
 // Wi-Fi setup
 const char* PARAM_INPUT_1 = "ssid";
 const char* PARAM_INPUT_2 = "pass";
@@ -437,29 +443,10 @@ void setup() {
     }
   }
 
-  if (SignalUnits == 1) {
-    SignalUnitsString = "dBf";
-  } else {
-    SignalUnitsString = "dBuV";
-  }
-
-  if (RDSClear == 1) {
-    RDSClearString = "ON";
-  } else {
-    RDSClearString = "OFF";
-  }
-
-  if (XDRGTKShutdown == 1) {
-    XDRGTKShutdownString = "ON";
-  } else {
-    XDRGTKShutdownString = "OFF";
-  }
-
-  if (WiFiSwitch == 1) {
-    WiFiSwitchString = "ON";
-  } else {
-    WiFiSwitchString = "OFF";
-  }
+  SignalUnitsString = SignalUnitsStrings[SignalUnits];
+  RDSClearString = RDSClearStrings[RDSClear];
+  XDRGTKShutdownString = XDRGTKShutdownStrings[XDRGTKShutdown];
+  WiFiSwitchString = WiFiSwitchStrings[WiFiSwitch];
 
   if (iMSset == 1 && EQset == 1) {
     iMSEQ = 2;
