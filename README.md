@@ -6,19 +6,19 @@ Original firmware: https://github.com/PE5PVB/TEF6686_ESP32
 [<img alt="Join the TEF6686 Discord community!" src="https://i.imgur.com/BYqhuLI.png">](https://discord.gg/ZAVNdS74mC)  
 
 
-## List of changes in the latest version:
-### v1.21
-- Added signal in dBm when the user is connected to Wi-Fi
-- Wi-Fi icon rework (now the Wi-Fi icon will show whether you're connected to a network / XDR-GTK separately)
-- Battery status updates without reboot, if you're not using Wi-Fi
-- Signal should jump way less when a neighbour frequency is too strong
-- XDR-GTK graph is now way smoother (similar to XDR F1HD)
-- A TP indicator has been added next to PTY info
-- Battery voltage calculation has been recalibrated (bugs may still occur)
-- A new battery check has been added, which checks if the user has a battery connected or not
+## Features:
+- All the PE5PVB's features
+- Wi-Fi support
+- XDR-GTK over Wi-Fi
+- Battery support
+- XDR-GTK graph improvements
+- TP indicator
 - The RT is now scrolling
 - 2 new themes (Whiteout & Heaven)
 - Fixed various graphical glitches
+- Themes 
+- More settings
+- RDS info storage
 
 ## Installation
 
