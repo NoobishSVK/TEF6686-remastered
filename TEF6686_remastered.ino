@@ -77,7 +77,7 @@
 #define SMETERPIN 27
 #define BATTERYPIN 13
 
-#define BWINTERVAL 200 // Refresh interval for certain UI elements 
+#define BWINTERVAL 200  // Refresh interval for certain UI elements
 
 //#define ARS       // uncomment for BGR type display (ARS version)
 #ifdef ARS
@@ -229,10 +229,10 @@ String XDRGTKShutdownString;
 String WiFiSwitchString;
 
 // Extra settings strings
-const char* SignalUnitsStrings[] = {"dBuV", "dBf"};
-const char* RDSClearStrings[] = {"OFF", "ON"};
-const char* XDRGTKShutdownStrings[] = {"OFF", "ON"};
-const char* WiFiSwitchStrings[] = {"OFF", "ON"};
+const char* SignalUnitsStrings[] = { "dBuV", "dBf" };
+const char* RDSClearStrings[] = { "OFF", "ON" };
+const char* XDRGTKShutdownStrings[] = { "OFF", "ON" };
+const char* WiFiSwitchStrings[] = { "OFF", "ON" };
 
 // Wi-Fi setup
 const char* PARAM_INPUT_1 = "ssid";
@@ -293,39 +293,39 @@ WiFiClient RemoteClient;
 TFT_eSprite sprite = TFT_eSprite(&tft);
 
 void initSPIFFS() {
- if (!SPIFFS.begin(true)) {
+  if (!SPIFFS.begin(true)) {
     Serial.println("An error has occurred while mounting SPIFFS");
   }
 }
 
 // Read File from SPIFFS
-String readFile(fs::FS &fs, const char * path){
+String readFile(fs::FS& fs, const char* path) {
   Serial.printf("Reading file: %s\r\n", path);
 
   File file = fs.open(path);
-  if(!file || file.isDirectory()){
+  if (!file || file.isDirectory()) {
     Serial.println("- failed to open file for reading");
     return String();
   }
-  
+
   String fileContent;
-  while(file.available()){
+  while (file.available()) {
     fileContent = file.readStringUntil('\n');
-    break;     
+    break;
   }
   return fileContent;
 }
 
 // Write file to SPIFFS
-void writeFile(fs::FS &fs, const char * path, const char * message){
+void writeFile(fs::FS& fs, const char* path, const char* message) {
   Serial.printf("Writing file: %s\r\n", path);
 
   File file = fs.open(path, FILE_WRITE);
-  if(!file){
+  if (!file) {
     Serial.println("- failed to open file for writing");
     return;
   }
-  if(file.print(message)){
+  if (file.print(message)) {
     Serial.println("- file written");
   } else {
     Serial.println("- frite failed");
@@ -333,7 +333,7 @@ void writeFile(fs::FS &fs, const char * path, const char * message){
 }
 
 bool initWiFi() {
-  if(ssid=="" || ip==""){
+  if (ssid == "" || ip == "") {
     Serial.println("Undefined SSID or IP address.");
     return false;
   }
@@ -342,11 +342,11 @@ bool initWiFi() {
     localIP.fromString(ip.c_str());
   }
 
-  if(gateway != "") {
+  if (gateway != "") {
     localGateway.fromString(gateway.c_str());
   }
 
-  if (!WiFi.config(localIP, localGateway, subnet)){
+  if (!WiFi.config(localIP, localGateway, subnet)) {
     Serial.println("STA Failed to configure");
     return false;
   }
@@ -424,17 +424,17 @@ void setup() {
   ssid = readFile(SPIFFS, ssidPath);
   pass = readFile(SPIFFS, passPath);
   ip = readFile(SPIFFS, ipPath);
-  gateway = readFile (SPIFFS, gatewayPath);
+  gateway = readFile(SPIFFS, gatewayPath);
   WiFi.setHostname(hostname.c_str());
 
   rawValue = analogRead(BATTERYPIN);
-  if(voltageLevel < 1.5) {
+  if (voltageLevel < 1.5) {
     voltageLevel = voltageLevel * 3.6;
   }
   delay(50);
 
-  if(initWiFi()) {
-    if(WiFiSwitch == 0) {
+  if (initWiFi()) {
+    if (WiFiSwitch == 0) {
       WiFi.mode(WIFI_OFF);
     } else {
       WiFi.mode(WIFI_STA);
@@ -600,7 +600,7 @@ void setup() {
 
   if (lowByte(device) != 14 && lowByte(device) != 1 && lowByte(device) != 9 && lowByte(device) != 3) {
     tft.setTextColor(TFT_RED);
-    tft.drawString("Tuner: !None!", 80, 65, 2);
+    tft.drawString("Tuner: !None! (TEF ERROR)", 160, 20, 2);
     while (true)
       ;
     for (;;)
@@ -696,8 +696,8 @@ void loop() {
             tft.drawString(PSold, 38, 192, 4);
             tft.drawString(PIold, 244, 192, 4);
             tft.drawString(RTold, 6, 222, 2);
-            tft.drawString(PTYold, 38, 168, 2);  
-            tft.drawString("TP", 190, 168, 2);          
+            tft.drawString(PTYold, 38, 168, 2);
+            tft.drawString("TP", 190, 168, 2);
           }
 
           tft.fillRect(20, 139, 12, 8, GreyoutColor);
@@ -1523,7 +1523,7 @@ void KeyUp() {
 
     tft.setTextColor(BackgroundColor);
     tft.drawString("TP", 190, 168, 2);
-    
+
     if (tunemode == true) {
       direction = true;
       seek = true;
@@ -1978,7 +1978,7 @@ void KeyDown() {
 
         case 130:
           break;
-        
+
         case 150:
           break;
       }
@@ -2212,22 +2212,22 @@ void readRds() {
       if (RDSClear == 1) {
         tft.setTextColor(BackgroundColor);
 
-        if(TPStatus == true) {
+        if (TPStatus == true) {
           tft.setTextColor(BackgroundColor);
           tft.drawString("TP", 190, 168, 2);
           TPStatus = false;
         }
 
-      } else { 
+      } else {
         sprite.fillSprite(BackgroundColor);
         sprite.pushSprite(6, 220);
 
-        if(TPStatus == true) {
+        if (TPStatus == true) {
           tft.setTextColor(GreyoutColor);
           tft.drawString("TP", 190, 168, 2);
           TPStatus = false;
         }
-        
+
         tft.setTextColor(GreyoutColor);
       }
       tft.drawString(PIold, 244, 192, 4);
@@ -2285,10 +2285,10 @@ void showPI() {
 }
 
 void showTP() {
-      if (RDSstatus == 1 && TPStatus == true) {
-        tft.setTextColor(PrimaryColor);
-        tft.drawString("TP", 190, 168, 2);      
-      }
+  if (RDSstatus == 1 && TPStatus == true) {
+    tft.setTextColor(PrimaryColor);
+    tft.drawString("TP", 190, 168, 2);
+  }
 }
 
 void showPTY() {
@@ -2316,21 +2316,21 @@ void showPS() {
 }
 
 void showRadioText() {
-  if ((RDSstatus == 1) /*&& !strcmp(rdsInfo.radioText, radioTextPrevious, 65)*/) {
+  if ((RDSstatus == 1 && band == 0) /*&& !strcmp(rdsInfo.radioText, radioTextPrevious, 65)*/) {
 
-  if (millis() - RTCLOCK >= 350) {
-    // Update the position of the text
-    xPos -= charWidth;
-    if (xPos < -tft.textWidth(rdsInfo.radioText) + (charWidth * 42)) {
-      xPos = 6;
+    if (millis() - RTCLOCK >= 350) {
+      // Update the position of the text
+      xPos -= charWidth;
+      if (xPos < -tft.textWidth(rdsInfo.radioText) + (charWidth * 42)) {
+        xPos = 6;
+      }
+
+      sprite.fillSprite(BackgroundColor);
+      sprite.setTextColor(PrimaryColor);
+      sprite.drawString(rdsInfo.radioText, xPos, yPos, 2);
+      sprite.pushSprite(6, 220);
+      RTCLOCK = millis();
     }
-
-    sprite.fillSprite(BackgroundColor);
-    sprite.setTextColor(PrimaryColor);
-    sprite.drawString(rdsInfo.radioText, xPos, yPos, 2);
-    sprite.pushSprite(6, 220);
-    RTCLOCK = millis();
-  }
     RTold = rdsInfo.radioText;
     strcpy(radioTextPrevious, rdsInfo.radioText);
   }
@@ -2350,7 +2350,7 @@ void BuildMenu() {
   tft.drawRect(0, 0, 320, 240, FrameColor);
   tft.drawLine(0, 23, 320, 23, FrameColor);
   tft.setTextColor(PrimaryColor);
-  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);  
+  tft.drawString("PRESS MODE TO EXIT AND SAVE", 20, 4, 2);
   tft.setTextColor(SecondaryColor);
   tft.drawRightString(VERSION, 305, 4, 2);
   tft.drawRoundRect(10, menuoption, 300, 18, 5, SecondaryColor);
@@ -2491,7 +2491,7 @@ void BuildMenu2() {
     tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
     tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
   } else {
-    tft.drawString("NONE", 20, 205, 2);
+    tft.drawString("UNDETECTED", 20, 205, 2);
   }
 
   /* Menu 2 Wi-Fi network info */
@@ -2507,7 +2507,7 @@ void BuildMenu2() {
   analogWrite(SMETERPIN, 0);
 }
 
-void doTheme() { // Use this to put your own colors in: http://www.barth-dev.de/online/rgb565-color-picker/
+void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de/online/rgb565-color-picker/
   switch (CurrentTheme) {
     case 0:  // Default PE5PVB theme
       PrimaryColor = 0xFFE0;
@@ -2553,7 +2553,7 @@ void doTheme() { // Use this to put your own colors in: http://www.barth-dev.de/
       OptimizerColor = 1;
       CurrentThemeString = "Monochrome";
       break;
-    case 4: // Volcano theme
+    case 4:  // Volcano theme
       PrimaryColor = 0xFC00;
       SecondaryColor = 0xFFFF;
       FrequencyColor = 0xFC00;
@@ -2564,24 +2564,24 @@ void doTheme() { // Use this to put your own colors in: http://www.barth-dev.de/
       OptimizerColor = 1;
       CurrentThemeString = "Volcano";
       break;
-    case 5: // Whiteout theme
+    case 5:  // Whiteout theme
       PrimaryColor = 0x0000;
       SecondaryColor = 0x0000;
       FrequencyColor = 0x18C3;
       FrameColor = 0x630C;
       GreyoutColor = 0x9492;
-      BackgroundColor = 0xDFFC; // FFFF White
+      BackgroundColor = 0xDFFC;  // FFFF White
       ActiveColor = 0x0000;
       OptimizerColor = 0xFFDF;
       CurrentThemeString = "Whiteout";
       break;
-    case 6: // Heaven theme
+    case 6:  // Heaven theme
       PrimaryColor = 0xFFFF;
       SecondaryColor = 0xFFFF;
       FrequencyColor = 0xFFFF;
       FrameColor = 0xCF5F;
       GreyoutColor = 0xCF7F;
-      BackgroundColor = 0x04BC; // FFFF White
+      BackgroundColor = 0x04BC;  // FFFF White
       ActiveColor = 0xFFFF;
       OptimizerColor = 0x047B;
       CurrentThemeString = "Heaven";
@@ -3287,7 +3287,7 @@ void doBW() {
       BWset = 0;
     }
 
-    switch(BWset) {
+    switch (BWset) {
       case 1: radio.setFMBandw(56); break;
       case 2: radio.setFMBandw(64); break;
       case 3: radio.setFMBandw(72); break;
@@ -3310,7 +3310,7 @@ void doBW() {
       BWset = 1;
     }
 
-    switch(BWset) {
+    switch (BWset) {
       case 1: radio.setFMBandw(3); break;
       case 2: radio.setFMBandw(4); break;
       case 3: radio.setFMBandw(6); break;
@@ -3355,7 +3355,8 @@ void updateTuneMode() {
     tft.drawRoundRect(3, 35, 40, 20, 5, SecondaryColor);
     tft.setTextColor(SecondaryColor);
     tft.drawCentreString("MAN", 24, 37, 2);
-}}
+  }
+}
 
 void ShowUSBstatus() {
   if (USBstatus == true) {
@@ -3369,15 +3370,14 @@ void ShowUSBstatus() {
 
   if (WiFi.status() == WL_CONNECTED && WiFistatus == false) {
     tft.drawBitmap(294, 6, WiFiLogo, 21, 21, PrimaryColor);
-    } else if (WiFi.status() == WL_CONNECTED && WiFistatus == true) {
+  } else if (WiFi.status() == WL_CONNECTED && WiFistatus == true) {
     tft.drawBitmap(294, 6, WiFiLogo, 21, 21, ActiveColor);
-      if (XDRGTKShutdown == 1 && analogRead(CONTRASTPIN) != 0) {
+    if (XDRGTKShutdown == 1 && analogRead(CONTRASTPIN) != 0) {
       analogWrite(CONTRASTPIN, 0);
     }
   } else {
     tft.drawBitmap(294, 6, WiFiLogo, 21, 21, GreyoutColor);
   }
-
 }
 
 void passwordcrypt() {
@@ -3485,24 +3485,72 @@ void XDRGTKRoutine() {
             XDRBWsetold = XDRBWset;
             BWset = 0;
           }
-          
-          switch(XDRBWset) {
-            case 0: XDRBWsetold = XDRBWset; BWset = 1; break;
-            case 1: XDRBWsetold = XDRBWset; BWset = 2; break;
-            case 2: XDRBWsetold = XDRBWset; BWset = 3; break;
-            case 3: XDRBWsetold = XDRBWset; BWset = 4; break;
-            case 4: XDRBWsetold = XDRBWset; BWset = 5; break;
-            case 5: XDRBWsetold = XDRBWset; BWset = 6; break;
-            case 6: XDRBWsetold = XDRBWset; BWset = 7; break;
-            case 7: XDRBWsetold = XDRBWset; BWset = 8; break;
-            case 8: XDRBWsetold = XDRBWset; BWset = 9; break;
-            case 9: XDRBWsetold = XDRBWset; BWset = 10; break;
-            case 10: XDRBWsetold = XDRBWset; BWset = 11; break;
-            case 11: XDRBWsetold = XDRBWset; BWset = 12; break;
-            case 12: XDRBWsetold = XDRBWset; BWset = 13; break;
-            case 13: XDRBWsetold = XDRBWset; BWset = 14; break;
-            case 14: XDRBWsetold = XDRBWset; BWset = 15; break;
-            case 15: XDRBWsetold = XDRBWset; BWset = 16; break;
+
+          switch (XDRBWset) {
+            case 0:
+              XDRBWsetold = XDRBWset;
+              BWset = 1;
+              break;
+            case 1:
+              XDRBWsetold = XDRBWset;
+              BWset = 2;
+              break;
+            case 2:
+              XDRBWsetold = XDRBWset;
+              BWset = 3;
+              break;
+            case 3:
+              XDRBWsetold = XDRBWset;
+              BWset = 4;
+              break;
+            case 4:
+              XDRBWsetold = XDRBWset;
+              BWset = 5;
+              break;
+            case 5:
+              XDRBWsetold = XDRBWset;
+              BWset = 6;
+              break;
+            case 6:
+              XDRBWsetold = XDRBWset;
+              BWset = 7;
+              break;
+            case 7:
+              XDRBWsetold = XDRBWset;
+              BWset = 8;
+              break;
+            case 8:
+              XDRBWsetold = XDRBWset;
+              BWset = 9;
+              break;
+            case 9:
+              XDRBWsetold = XDRBWset;
+              BWset = 10;
+              break;
+            case 10:
+              XDRBWsetold = XDRBWset;
+              BWset = 11;
+              break;
+            case 11:
+              XDRBWsetold = XDRBWset;
+              BWset = 12;
+              break;
+            case 12:
+              XDRBWsetold = XDRBWset;
+              BWset = 13;
+              break;
+            case 13:
+              XDRBWsetold = XDRBWset;
+              BWset = 14;
+              break;
+            case 14:
+              XDRBWsetold = XDRBWset;
+              BWset = 15;
+              break;
+            case 15:
+              XDRBWsetold = XDRBWset;
+              BWset = 16;
+              break;
             default: XDRBWset = XDRBWsetold; break;
           }
           doBW();
@@ -3603,24 +3651,24 @@ void XDRGTKRoutine() {
             radio.setFrequency(scanner_start, 65, 108);
             Serial.print('U');
             switch (scanner_filter) {
-                case -1: BWset = 0; break;
-                case 0: BWset = 1; break;
-                case 26: BWset = 2; break;
-                case 1: BWset = 3; break;
-                case 28: BWset = 4; break;
-                case 29: BWset = 5; break;
-                case 3: BWset = 6; break;
-                case 4: BWset = 7; break;
-                case 5: BWset = 8; break;
-                case 7: BWset = 9; break;
-                case 8: BWset = 10; break;
-                case 9: BWset = 11; break;
-                case 10: BWset = 12; break;
-                case 11: BWset = 13; break;
-                case 12: BWset = 14; break;
-                case 13: BWset = 15; break;
-                case 15: BWset = 16; break;
-                default: BWset = 0; break;
+              case -1: BWset = 0; break;
+              case 0: BWset = 1; break;
+              case 26: BWset = 2; break;
+              case 1: BWset = 3; break;
+              case 28: BWset = 4; break;
+              case 29: BWset = 5; break;
+              case 3: BWset = 6; break;
+              case 4: BWset = 7; break;
+              case 5: BWset = 8; break;
+              case 7: BWset = 9; break;
+              case 8: BWset = 10; break;
+              case 9: BWset = 11; break;
+              case 10: BWset = 12; break;
+              case 11: BWset = 13; break;
+              case 12: BWset = 14; break;
+              case 13: BWset = 15; break;
+              case 15: BWset = 16; break;
+              default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
@@ -3853,27 +3901,75 @@ void XDRGTKWiFi() {
             XDRBWsetold = XDRBWset;
             BWset = 0;
           }
-          
-          switch(XDRBWset) {
-            case 0: XDRBWsetold = XDRBWset; BWset = 1; break;
-            case 1: XDRBWsetold = XDRBWset; BWset = 2; break;
-            case 2: XDRBWsetold = XDRBWset; BWset = 3; break;
-            case 3: XDRBWsetold = XDRBWset; BWset = 4; break;
-            case 4: XDRBWsetold = XDRBWset; BWset = 5; break;
-            case 5: XDRBWsetold = XDRBWset; BWset = 6; break;
-            case 6: XDRBWsetold = XDRBWset; BWset = 7; break;
-            case 7: XDRBWsetold = XDRBWset; BWset = 8; break;
-            case 8: XDRBWsetold = XDRBWset; BWset = 9; break;
-            case 9: XDRBWsetold = XDRBWset; BWset = 10; break;
-            case 10: XDRBWsetold = XDRBWset; BWset = 11; break;
-            case 11: XDRBWsetold = XDRBWset; BWset = 12; break;
-            case 12: XDRBWsetold = XDRBWset; BWset = 13; break;
-            case 13: XDRBWsetold = XDRBWset; BWset = 14; break;
-            case 14: XDRBWsetold = XDRBWset; BWset = 15; break;
-            case 15: XDRBWsetold = XDRBWset; BWset = 16; break;
+
+          switch (XDRBWset) {
+            case 0:
+              XDRBWsetold = XDRBWset;
+              BWset = 1;
+              break;
+            case 1:
+              XDRBWsetold = XDRBWset;
+              BWset = 2;
+              break;
+            case 2:
+              XDRBWsetold = XDRBWset;
+              BWset = 3;
+              break;
+            case 3:
+              XDRBWsetold = XDRBWset;
+              BWset = 4;
+              break;
+            case 4:
+              XDRBWsetold = XDRBWset;
+              BWset = 5;
+              break;
+            case 5:
+              XDRBWsetold = XDRBWset;
+              BWset = 6;
+              break;
+            case 6:
+              XDRBWsetold = XDRBWset;
+              BWset = 7;
+              break;
+            case 7:
+              XDRBWsetold = XDRBWset;
+              BWset = 8;
+              break;
+            case 8:
+              XDRBWsetold = XDRBWset;
+              BWset = 9;
+              break;
+            case 9:
+              XDRBWsetold = XDRBWset;
+              BWset = 10;
+              break;
+            case 10:
+              XDRBWsetold = XDRBWset;
+              BWset = 11;
+              break;
+            case 11:
+              XDRBWsetold = XDRBWset;
+              BWset = 12;
+              break;
+            case 12:
+              XDRBWsetold = XDRBWset;
+              BWset = 13;
+              break;
+            case 13:
+              XDRBWsetold = XDRBWset;
+              BWset = 14;
+              break;
+            case 14:
+              XDRBWsetold = XDRBWset;
+              BWset = 15;
+              break;
+            case 15:
+              XDRBWsetold = XDRBWset;
+              BWset = 16;
+              break;
             default: XDRBWset = XDRBWsetold; break;
           }
-          
+
           doBW();
           RemoteClient.print(XDRBWset);
           RemoteClient.print("\n");
@@ -3972,24 +4068,24 @@ void XDRGTKWiFi() {
             radio.setFrequency(scanner_start, 65, 108);
             RemoteClient.print('U');
             switch (scanner_filter) {
-                case -1: BWset = 0; break;
-                case 0: BWset = 1; break;
-                case 26: BWset = 2; break;
-                case 1: BWset = 3; break;
-                case 28: BWset = 4; break;
-                case 29: BWset = 5; break;
-                case 3: BWset = 6; break;
-                case 4: BWset = 7; break;
-                case 5: BWset = 8; break;
-                case 7: BWset = 9; break;
-                case 8: BWset = 10; break;
-                case 9: BWset = 11; break;
-                case 10: BWset = 12; break;
-                case 11: BWset = 13; break;
-                case 12: BWset = 14; break;
-                case 13: BWset = 15; break;
-                case 15: BWset = 16; break;
-                default: BWset = 0; break;
+              case -1: BWset = 0; break;
+              case 0: BWset = 1; break;
+              case 26: BWset = 2; break;
+              case 1: BWset = 3; break;
+              case 28: BWset = 4; break;
+              case 29: BWset = 5; break;
+              case 3: BWset = 6; break;
+              case 4: BWset = 7; break;
+              case 5: BWset = 8; break;
+              case 7: BWset = 9; break;
+              case 8: BWset = 10; break;
+              case 9: BWset = 11; break;
+              case 10: BWset = 12; break;
+              case 11: BWset = 13; break;
+              case 12: BWset = 14; break;
+              case 13: BWset = 15; break;
+              case 15: BWset = 16; break;
+              default: BWset = 0; break;
             }
             doBW();
             if (screenmute == false) {
@@ -4115,50 +4211,50 @@ void XDRGTKWiFi() {
 }*/
 
 void WiFiSetup() {
-    // NULL sets an open Access Point
-    WiFi.softAP("TEF6686 FM Tuner", NULL);
+  // NULL sets an open Access Point
+  WiFi.softAP("TEF6686 FM Tuner", NULL);
 
-    IPAddress IP = WiFi.softAPIP();
-    // Web Server Root URL
-    setupserver.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send_P(200, "text/html", index_html);
-      //request->send(SPIFFS, "/wifimanager.html", "text/html");
-    });
-    
-//    setupserver.serveStatic("/wifimanager.html", SPIFFS, "/wifimanager.html");
-    
-    setupserver.on("/", HTTP_POST, [](AsyncWebServerRequest *request) {
-      int params = request->params();
-      for(int i=0;i<params;i++){
-        AsyncWebParameter* p = request->getParam(i);
-        if(p->isPost()){
-          // HTTP POST ssid value
-          if (p->name() == PARAM_INPUT_1) {
-            ssid = p->value().c_str();
-            writeFile(SPIFFS, ssidPath, ssid.c_str());
-          }
-          // HTTP POST pass value
-          if (p->name() == PARAM_INPUT_2) {
-            pass = p->value().c_str();
-            writeFile(SPIFFS, passPath, pass.c_str());
-          }
-          // HTTP POST ip value
-          if (p->name() == PARAM_INPUT_3) {
-            ip = p->value().c_str();
-            writeFile(SPIFFS, ipPath, ip.c_str());
-          }
-          // HTTP POST gateway value
-          if (p->name() == PARAM_INPUT_4) {
-            gateway = p->value().c_str();
-            writeFile(SPIFFS, gatewayPath, gateway.c_str());
-          }
+  IPAddress IP = WiFi.softAPIP();
+  // Web Server Root URL
+  setupserver.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
+    request->send_P(200, "text/html", index_html);
+    //request->send(SPIFFS, "/wifimanager.html", "text/html");
+  });
+
+  //    setupserver.serveStatic("/wifimanager.html", SPIFFS, "/wifimanager.html");
+
+  setupserver.on("/", HTTP_POST, [](AsyncWebServerRequest* request) {
+    int params = request->params();
+    for (int i = 0; i < params; i++) {
+      AsyncWebParameter* p = request->getParam(i);
+      if (p->isPost()) {
+        // HTTP POST ssid value
+        if (p->name() == PARAM_INPUT_1) {
+          ssid = p->value().c_str();
+          writeFile(SPIFFS, ssidPath, ssid.c_str());
+        }
+        // HTTP POST pass value
+        if (p->name() == PARAM_INPUT_2) {
+          pass = p->value().c_str();
+          writeFile(SPIFFS, passPath, pass.c_str());
+        }
+        // HTTP POST ip value
+        if (p->name() == PARAM_INPUT_3) {
+          ip = p->value().c_str();
+          writeFile(SPIFFS, ipPath, ip.c_str());
+        }
+        // HTTP POST gateway value
+        if (p->name() == PARAM_INPUT_4) {
+          gateway = p->value().c_str();
+          writeFile(SPIFFS, gatewayPath, gateway.c_str());
         }
       }
-      request->send(200, "text/plain", "Settings saved. Tuner is now rebooting. Tuner's IP Address: "  + ip);
-      delay(2000);
-      ESP.restart();
-    });
-    setupserver.begin();
+    }
+    request->send(200, "text/plain", "Settings saved. Tuner is now rebooting. Tuner's IP Address: " + ip);
+    delay(2000);
+    ESP.restart();
+  });
+  setupserver.begin();
 }
 
 void serial_hex(uint8_t val) {
