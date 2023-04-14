@@ -190,6 +190,8 @@ int GreyoutColor;
 int BackgroundColor;
 int ActiveColor;
 int OptimizerColor;
+int RDSColor;
+int StereoColor;
 int CurrentTheme;
 
 // Scrolling RT settings
@@ -1043,8 +1045,8 @@ void doStereoToggle() {
       tft.drawCircle(81, 15, 9, BackgroundColor);
       tft.drawCircle(91, 15, 10, BackgroundColor);
       tft.drawCircle(91, 15, 9, BackgroundColor);
-      tft.drawCircle(86, 15, 10, PrimaryColor);
-      tft.drawCircle(86, 15, 9, PrimaryColor);
+      tft.drawCircle(86, 15, 10, StereoColor);
+      tft.drawCircle(86, 15, 9, StereoColor);
     }
     radio.setMono(2);
     StereoToggle = false;
@@ -2521,6 +2523,8 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0000;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = TFT_RED;
+      RDSColor = TFT_SKYBLUE;
       CurrentThemeString = "Default";
       break;
     case 1:  // Cyan theme
@@ -2532,6 +2536,8 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0000;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = 0xF3F;
+      RDSColor = 0xFFFF;
       CurrentThemeString = "Cyan";
       break;
     case 2:  // Crimson theme
@@ -2543,6 +2549,8 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0000;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = 0xF8C3;
+      RDSColor = 0xFFFF;
       CurrentThemeString = "Crimson";
       break;
     case 3:  // Monochrome theme
@@ -2554,6 +2562,8 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0000;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = 0xFFFF;
+      RDSColor = 0xFFFF;
       CurrentThemeString = "Monochrome";
       break;
     case 4:  // Volcano theme
@@ -2565,9 +2575,24 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0806;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = 0xFC00;
+      RDSColor = 0xFFFF;
       CurrentThemeString = "Volcano";
       break;
-    case 5:  // Whiteout theme
+    case 5:  // Dendro theme
+      PrimaryColor = TFT_GREEN;
+      SecondaryColor = 0xFFFF;
+      FrequencyColor = TFT_GREEN;
+      FrameColor = 0x0200;
+      GreyoutColor = 0x4A69;
+      BackgroundColor = 0x0000;
+      ActiveColor = 0xFFFF;
+      OptimizerColor = 1;
+      StereoColor = TFT_GREEN;
+      RDSColor = TFT_YELLOW;
+      CurrentThemeString = "Dendro";
+      break;
+    case 6:  // Whiteout theme
       PrimaryColor = 0x0000;
       SecondaryColor = 0x0000;
       FrequencyColor = 0x18C3;
@@ -2576,18 +2601,9 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0xDFFC;  // FFFF White
       ActiveColor = 0x0000;
       OptimizerColor = 0xFFDF;
+      StereoColor = 0x0000;
+      RDSColor = 0x0000;
       CurrentThemeString = "Whiteout";
-      break;
-    case 6:  // Heaven theme
-      PrimaryColor = 0xFFFF;
-      SecondaryColor = 0xFFFF;
-      FrequencyColor = 0xFFFF;
-      FrameColor = 0xCF5F;
-      GreyoutColor = 0xCF7F;
-      BackgroundColor = 0x04BC;  // FFFF White
-      ActiveColor = 0xFFFF;
-      OptimizerColor = 0x047B;
-      CurrentThemeString = "Heaven";
       break;
     default:
       PrimaryColor = 0xFFE0;
@@ -2598,6 +2614,8 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       BackgroundColor = 0x0000;
       ActiveColor = 0xFFFF;
       OptimizerColor = 1;
+      StereoColor = TFT_RED;
+      RDSColor = TFT_SKYBLUE;
       CurrentThemeString = "Default";
       break;
   }
@@ -2933,7 +2951,7 @@ void ShowRDSLogo(bool RDSstatus) {
   if (screenmute == false) {
     if (RDSstatus != RDSstatusold) {
       if (RDSstatus == true) {
-        tft.drawBitmap(110, 5, RDSLogo, 67, 22, PrimaryColor);
+        tft.drawBitmap(110, 5, RDSLogo, 67, 22, RDSColor);
       } else {
         tft.drawBitmap(110, 5, RDSLogo, 67, 22, GreyoutColor);
       }
@@ -2951,10 +2969,10 @@ void ShowStereoStatus() {
     }
     if (Stereostatus != Stereostatusold) {
       if (Stereostatus == true && screenmute == false) {
-        tft.drawCircle(81, 15, 10, PrimaryColor);
-        tft.drawCircle(81, 15, 9, PrimaryColor);
-        tft.drawCircle(91, 15, 10, PrimaryColor);
-        tft.drawCircle(91, 15, 9, PrimaryColor);
+        tft.drawCircle(81, 15, 10, StereoColor);
+        tft.drawCircle(81, 15, 9, StereoColor);
+        tft.drawCircle(91, 15, 10, StereoColor);
+        tft.drawCircle(91, 15, 9, StereoColor);
       } else {
         if (screenmute == false) {
           tft.drawCircle(81, 15, 10, GreyoutColor);
