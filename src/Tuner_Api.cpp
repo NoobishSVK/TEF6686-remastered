@@ -27,7 +27,7 @@ void Radio_SetFreq_AM(uint16_t Freq)
 
 void Radio_ChangeFreqOneStep(uint8_t UpDown, uint8_t stepsize, uint16_t LowEdge, uint16_t HighEdge )
 {
-  byte temp;
+  int32_t temp;
   if (stepsize == 0) {
     temp = 10;
   }
@@ -40,6 +40,10 @@ void Radio_ChangeFreqOneStep(uint8_t UpDown, uint8_t stepsize, uint16_t LowEdge,
   if (stepsize == 3) {
     temp = 100;
   }
+  if (stepsize == 4) {
+    temp = 1000;
+  }
+  
   if (UpDown == 1) {
     Radio_CurrentFreq += temp;
     if (Radio_CurrentFreq > HighEdge * 100) {
@@ -55,7 +59,7 @@ void Radio_ChangeFreqOneStep(uint8_t UpDown, uint8_t stepsize, uint16_t LowEdge,
 
 void Radio_ChangeFreqOneStep_AM(uint8_t UpDown, uint8_t stepsize)
 {
-  byte temp;
+  int32_t temp;
   if (stepsize == 0) {
     if (Radio_CurrentFreq_AM < 2000) {
       temp = 9;
@@ -72,6 +76,10 @@ void Radio_ChangeFreqOneStep_AM(uint8_t UpDown, uint8_t stepsize)
   if (stepsize == 3) {
     temp = 100;
   }
+  if (stepsize == 4) {
+    temp = 1000;
+  }
+  
   if (UpDown == 1) {
     Radio_CurrentFreq_AM += temp;
     if (Radio_CurrentFreq_AM > 27000) {
