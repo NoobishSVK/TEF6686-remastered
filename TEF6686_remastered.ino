@@ -45,7 +45,7 @@
   #define LOAD_FONT8
   #define LOAD_GFXFF
   #define SMOOTH_FONT
-  #define SPI_FREQUENCY   10000000
+  #define SPI_FREQUENCY   10000000 (if you hear interference, consider lowering the frequency)
 
   ALL OTHER SETTINGS SHOULD STAY !!!!
 
@@ -274,6 +274,7 @@ unsigned long peakholdmillis;
 unsigned long BWCLOCK = 0;
 unsigned long RTCLOCK = 0;
 unsigned long TPCLOCK = 0;
+unsigned long VCLOCK = 0;
 
 // Battery calculation
 const int MAX_ANALOG_VAL = 4095;
@@ -683,6 +684,7 @@ void loop() {
         tft.drawString("PS:", 6, 195, 2);
         tft.drawString("PTY:", 6, 168, 2);
         tft.drawLine(20, 150, 200, 150, TFT_DARKGREY);
+
       }
       LowLevelInit = true;
     }
@@ -768,11 +770,13 @@ void loop() {
         showPTY();
         showPS();
         showRadioText();
-        showPS();
+        //showPS();
+        ShowBatteryLevel();
         ShowStereoStatus();
         ShowOffset();
         ShowSignalLevel();
         ShowBW();
+      
       }
     }
     XDRGTKRoutine();
@@ -936,6 +940,19 @@ void loop() {
       attachInterrupt(digitalPinToInterrupt(ROTARY_PIN_A), encoderISR, CHANGE);
       attachInterrupt(digitalPinToInterrupt(ROTARY_PIN_B), encoderISR, CHANGE);
       attachInterrupt(digitalPinToInterrupt(ROTARY_BUTTON), encoderButtonISR, FALLING);
+    }
+  }
+}
+
+void ShowBatteryLevel() {
+  if (millis() - VCLOCK >= interval) {
+      VCLOCK = millis();
+      if (WiFiSwitch == 0) {
+      rawValue = analogRead(BATTERYPIN);
+      voltageLevel = (rawValue / 4095.0) * 2 * 1.1 * 3.3 - 0.2;  // calculate voltage level
+      tft.setTextColor(PrimaryColor);
+      tft.fillRect(215, 173, 30, 12, BackgroundColor);  // clear the area before drawing
+      tft.drawString(String(voltageLevel) + "V", 215, 173, 1);
     }
   }
 }
@@ -1576,7 +1593,7 @@ void KeyUp() {
           tft.setTextColor(TFT_BLACK);
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           CurrentTheme += 1;
-          if (CurrentTheme > 6) {
+          if (CurrentTheme > 7) {
             CurrentTheme = 0;
           }
 
@@ -1854,11 +1871,6 @@ void KeyUp() {
       }
     }
   }
-  if (optenc == 0) {
-    while (digitalRead(ROTARY_PIN_A) == LOW || digitalRead(ROTARY_PIN_B) == LOW) {
-      delay(5);
-    }
-  }
   position = encoder.getPosition();
 }
 
@@ -1916,7 +1928,7 @@ void KeyDown() {
           tft.drawCentreString(CurrentThemeString, 150, 110, 4);
           CurrentTheme -= 1;
           if (CurrentTheme < 0) {
-            CurrentTheme = 6;
+            CurrentTheme = 7;
           }
 
           doTheme();
@@ -2452,7 +2464,7 @@ void BuildMenu2() {
   tft.fillScreen(BackgroundColor);
   tft.drawRect(0, 0, 320, 240, FrameColor);
   tft.drawLine(0, 23, 320, 23, FrameColor);
-  tft.drawLine(0, 185, 320, 185, FrameColor);
+  tft.drawLine(0, 205, 320, 205, FrameColor);
   tft.setTextColor(PrimaryColor);
   tft.drawString("PRESS MODE TO EXIT AND STORE", 20, 4, 2);
   tft.setTextColor(SecondaryColor);
@@ -2467,8 +2479,8 @@ void BuildMenu2() {
   tft.drawString("Wi-Fi connectivity", 20, 110, 2);
   tft.drawString("Wi-Fi setup", 20, 130, 2);
   tft.drawString("Screen shutdown", 20, 150, 2);
-
   tft.setTextColor(PrimaryColor);
+
   tft.drawRightString(CurrentThemeString, 305, 30, 2);
   tft.drawRightString(SignalUnitsString, 305, 50, 2);
   tft.drawRightString(RDSClearString, 305, 70, 2);
@@ -2485,7 +2497,7 @@ void BuildMenu2() {
   if (batteryPercentage < 20) {
     tft.setTextColor(TFT_RED);
   }
-  tft.drawString("Battery:", 20, 190, 2);
+  tft.drawString("Battery:", 20, 210, 1);
 
   if (WiFiSwitch == 0) {
     rawValue = analogRead(BATTERYPIN);
@@ -2493,21 +2505,20 @@ void BuildMenu2() {
   }
 
   if (voltageLevel > 0.5) {
-    tft.drawString(String(voltageLevel) + "V", 20, 205, 2);
-    tft.drawString(String(batteryPercentage) + "%", 20, 220, 2);
+    tft.drawString(String(voltageLevel) + "V [" + String(rawValue) + "u]", 20, 219, 1);
+    tft.drawString(String(batteryPercentage) + "%", 20, 228, 1);
   } else {
-    tft.drawString("UNDETECTED", 20, 205, 2);
+    tft.drawString("UNDETECTED", 20, 219, 1);
+    tft.drawString(String(voltageLevel) + "V [" + String(rawValue) + "u]", 20, 228, 1);
   }
 
   /* Menu 2 Wi-Fi network info */
 
   tft.setTextColor(SecondaryColor);
-  if (WiFiSwitch == 0) {
-    tft.drawRightString("NETWORK DISCONNECTED", 310, 190, 2);
-  } else {
-    tft.drawRightString("IP: " + ip, 310, 190, 2);
-    tft.drawRightString("SSID: " + ssid, 310, 205, 2);
-    tft.drawRightString("Signal: " + String(WiFi.RSSI()) + " dBm", 310, 220, 2);
+  if (WiFiSwitch == 1) {
+    tft.drawRightString("IP: " + ip, 305, 210, 1);
+    tft.drawRightString("SSID: " + ssid, 305, 219, 1);
+    tft.drawRightString("Signal: " + String(WiFi.RSSI()) + " dBm", 305, 228, 1);
   }
   analogWrite(SMETERPIN, 0);
 }
@@ -2592,7 +2603,20 @@ void doTheme() {  // Use this to put your own colors in: http://www.barth-dev.de
       RDSColor = TFT_YELLOW;
       CurrentThemeString = "Dendro";
       break;
-    case 6:  // Whiteout theme
+    case 6:  // Sakura theme
+      PrimaryColor = 0xF3D5;
+      SecondaryColor = 0xFFFF;
+      FrequencyColor = 0xF3D5;
+      FrameColor = 0x3845;
+      GreyoutColor = 0x4A69;
+      BackgroundColor = 0x0000;
+      ActiveColor = 0xFFFF;
+      OptimizerColor = 1;
+      StereoColor = 0xF3D5;
+      RDSColor = TFT_WHITE;
+      CurrentThemeString = "Sakura";
+      break;
+    case 7:  // Whiteout theme
       PrimaryColor = 0x0000;
       SecondaryColor = 0x0000;
       FrequencyColor = 0x18C3;
