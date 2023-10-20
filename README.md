@@ -1,3 +1,7 @@
+# ATTENTION
+This repository is outdated and all the changes have been merged with the new software by PE5PVB. Please follow this repository instead:
+https://github.com/PE5PVB/TEF6686_ESP32
+
 # TEF6686 [ESP32] - Remastered!
 
 An improvement of PE5PVB's TEF6686 firmware based on ESP32.  
